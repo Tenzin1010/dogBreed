@@ -1,22 +1,34 @@
 
 function getDogImgs(breed){
+
     let api="https://dog.ceo/api/breed/";
     let apiKey = api + breed + '/images/random';
     
     fetch(apiKey)
-        .then(response=>response.json())
+        .then(response=> {
+            if(response.ok) {
+                return response.json();
+            }
+            $(".randompic").empty();
+            throw "Breed not found";
+        })    
         .then(responseJson=>displayDogImgs(responseJson))
-        .catch(error=>alert('Oops somethings broken.'))
-}
+        .catch(err => {
+            $('#js-error-message').text(`Something went wrong: ${err}`);
+          });
+      }
 
 function displayDogImgs(responseJson){
+    $(".randompic").empty();
+    $('#js-error-message').empty();
     console.log(responseJson);
+    $(".randompic").append(`<img src="${responseJson.message}">`)
+    $('.results').removeClass('hidden');  
 }
 
 $('form'). on('click', '#submitButton', function(){        
     let userSubmit = $('#getBreed').val();
-    getDogImgs(userSubmit);
-    
+    getDogImgs(userSubmit); 
 });
 
 function watchForm(){
