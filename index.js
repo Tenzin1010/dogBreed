@@ -1,4 +1,5 @@
 
+
 function getDogImgs(breed){
 
     let api="https://dog.ceo/api/breed/";
@@ -10,11 +11,12 @@ function getDogImgs(breed){
                 return response.json();
             }
             $(".randompic").empty();
-            throw "Breed not found";
+            throw new Error(response.statusText || "Breed not found");
         })    
         .then(responseJson=>displayDogImgs(responseJson))
         .catch(err => {
             $('#js-error-message').text(`Something went wrong: ${err}`);
+            $('.results').removeClass('hidden');  
           });
       }
 
